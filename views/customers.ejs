@@ -14,8 +14,8 @@
                 <td><%= e.identityNumber %></td>
                 <td><%= e.fullName %></td>
                 <td>
-                    <a href="">View Accounts</a>
-                    <a href="">Edit Profile</a>
+                    <a href="/customers/<%= e.id %>/accounts">View Accounts</a>
+                    <a href="/customers/<%= e.id %>/editProfile"">Edit Profile</a>
                 </td>
             </tr>
         <% }) %> 
