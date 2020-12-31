@@ -1,0 +1,40 @@
+<%- include('./_partial/header.ejs') %> 
+<h3 class="mb-3">Good day, <%= data.fullName %> </h3>
+<center>
+    <table class="table mb-5">
+        <tr>
+            <th>Account Number</th>
+            <th>Type</th>
+            <th>Balance</th>
+            <th>Action</th>
+        </tr>
+        <% data.Accounts.forEach(account => { %>
+            <tr>
+                <td><%= account.accountNumber %></td>
+                <td><%= account.type %></td>
+                <td><%= account.balance %></td>
+                <td><a href="">transfer</a></td>
+            </tr>
+        <% }) %> 
+    </table>
+
+</center>
+<h3 class="text-center"><u>Add Account</u></h3>
+<form action="/customers/<%= data.id %>/accounts" method="POST">
+    <div class="mb-3">
+        <label class="form-label">Account Type : </label>
+        <select class="form-select" name="type">
+            <option value="On Account">On Account</option>
+            <option value="Xtra Payroll">Xtra Payroll</option>
+            <option value="Tabunganku">Tabunganku</option>
+          </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Balance</label>
+        <input type="number" class="form-control" name="balance">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="/customers" class="btn btn-danger">Back</a>
+</form>
+<%- include('./_partial/footer.ejs') %> 

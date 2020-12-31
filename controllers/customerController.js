@@ -1,4 +1,4 @@
-const { Customer } = require('../models')
+const { Customer, Account } = require('../models')
 
 const formatDate = require('../helpers/formatDate')
 
@@ -52,11 +52,25 @@ class Controller {
     }
 
     static showAccounts(req,res){
-
+        const { idCustomer } = req.params
+        Customer.findOne({
+            where:{id: idCustomer},
+            include: [Account]
+        })
+        .then(data => res.render('accounts', {data}))
+        .catch(e => res.send(e))
     }
 
     static addAccount(req,res){
-
+        const {idCustomer} = req.params
+        const input = {
+            type: req.body.type ? req.body.type : null,
+            balance: req.body.balance ? req.body.balance : null,
+            CustomerId: idCustomer
+        }
+        Account.create(input)
+        .then( _=> res.redirect(`/customers/${idCustomer}/accounts`))
+        .catch(e => res.send(e))
     }
 }
 

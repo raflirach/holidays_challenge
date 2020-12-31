@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     CustomerId: DataTypes.INTEGER,
     accountNumber: DataTypes.STRING,
   }, {
+    hooks: {
+      beforeCreate: (instance) => {
+        instance.accountNumber = Math.random().toString().slice(2,12);
+      }
+    },
     sequelize,
     modelName: 'Account',
   });
