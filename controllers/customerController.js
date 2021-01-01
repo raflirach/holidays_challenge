@@ -46,8 +46,21 @@ class Controller {
             birthDate: req.body.birthDate ? req.body.birthDate : null,
             gender: req.body.gender ? req.body.gender : null,
         }
-        Customer.update(input, {where:{id:idCustomer}})
-        .then( _=> res.redirect('/customers') )
+        Customer.findOne({
+            where:{
+                id:idCustomer,
+                identityNumber: input.identityNumber
+            }
+        })
+        .then(data => {
+            if(data){
+                delete input.identityNumber
+                return Customer.update(input, {where:{id:idCustomer}})
+            }else{
+                return Customer.update(input, {where:{id:idCustomer}})
+            }
+        })
+        .then( _=> res.redirect('/customers'))
         .catch(e => res.send(e))
     }
 
