@@ -12,8 +12,8 @@
             <tr>
                 <td><%= account.accountNumber %></td>
                 <td><%= account.type %></td>
-                <td><%= account.balance %></td>
-                <td><a href="">transfer</a></td>
+                <td><%= formatBalance(account.balance) %></td>
+                <td><a href="/customers/<%= account.CustomerId %>/accounts/<%= account.id %>/transfer">transfer</a></td>
             </tr>
         <% }) %> 
     </table>

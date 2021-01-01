@@ -1,6 +1,9 @@
 const { Customer, Account } = require('../models')
 
 const formatDate = require('../helpers/formatDate')
+const formatBalance = require('../helpers/formatBalance')
+const { Op } = require("sequelize");
+
 
 class Controller {
     static showList(req,res){
@@ -70,7 +73,7 @@ class Controller {
             where:{id: idCustomer},
             include: [Account]
         })
-        .then(data => res.render('accounts', {data}))
+        .then(data => res.render('accounts', {data,formatBalance}))
         .catch(e => res.send(e))
     }
 
@@ -83,6 +86,51 @@ class Controller {
         }
         Account.create(input)
         .then( _=> res.redirect(`/customers/${idCustomer}/accounts`))
+        .catch(e => res.send(e))
+    }
+
+    static showTransferForm(req,res){
+        const {idCustomer,idAccount} = req.params
+        let sender
+        Account.findByPk(idAccount,{include:Customer})
+        .then(data => {
+            sender = data
+            return Account.findAll({
+                include:Customer,
+                order:['accountNumber'],
+                where:{
+                    id: {
+                        [Op.ne]:idAccount
+                    }
+                }
+            })
+        })
+        .then(receiver => res.render('formTransfer',{receiver,sender,formatBalance}))
+        .catch(e => res.send(e))
+    }
+
+    static transfer(req,res){
+        const {idCustomer,idAccount} = req.params
+        const input = {
+            amount: req.body.amount ? +req.body.amount : 0,
+            receiverId : req.body.accountId
+        }
+        Account.findByPk(idAccount)
+        .then(data => {
+            return Account.update({
+                balance: data.balance - input.amount
+            },
+            {where:{id:idAccount}, individualHooks: true})
+        })
+        .then( _=> Account.findByPk(input.receiverId))
+        .then(data => {
+            return Account.update({
+                balance:data.balance + input.amount
+            },
+            {where:{id:input.receiverId}},
+        )
+        })
+        .then(_=>res.redirect(`/customers/${idCustomer}/accounts`))
         .catch(e => res.send(e))
     }
 }

@@ -1,0 +1,21 @@
+<%- include('./_partial/header.ejs') %> 
+
+<h4>Transfer From : <%= sender.accountNumber %> <%= sender.type %> <%= formatBalance(sender.balance) %></h4>
+<form action="/customers/<%= sender.Customer.id %>/accounts/<%= sender.id %>/transfer" method="POST">
+    <div class="mb-3">
+        <label class="form-label">Amount:</label>
+        <input type="number" class="form-control" name="amount" placeholder="0">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Transfer To:</label>
+        <select class="form-select" name="accountId">
+            <% receiver.forEach(e => { %>
+                <option value="<%= e.id %>"><%= e.accountNumber %> - <%= e.Customer.fullName %></option>
+            <% }) %> 
+        </select>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Transfer</button>
+</form>
+
+<%- include('./_partial/footer.ejs') %> 
