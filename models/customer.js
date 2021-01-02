@@ -21,16 +21,16 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: "Identity Number must be filled"
+          msg: "ein=Identity Number must be filled"
         },
         len: {
           args : [16,20],
-          msg: "Identity Number minimum 16 characters and maximum 20 characters"
+          msg: "ein=Identity Number minimum 16 characters and maximum 20 characters"
         },
         isDuplicate(value, next) {
           Customer.findOne({where: {identityNumber: value}})
           .then( data => {
-            if(data) next(new Error('Duplicate Identity Number'))
+            if(data) next(new Error('ein=Duplicate Identity Number'))
             else next()
           })
         }
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: "Full Name must be filled"
+          msg: "efn=Full Name must be filled"
         },
       }
     },
@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           args: true,
-          msg: "Birth Date must be filled"
+          msg: "ebd=Birth Date must be filled"
         },
       }
     },

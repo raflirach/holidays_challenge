@@ -17,7 +17,9 @@ class Controller {
     }
 
     static showFormRegister(req,res){
-        res.render('formRegister')
+        let errors
+        if(Object.keys(req.query)) errors = req.query
+        res.render('formRegister', {errors})
     }
 
     static register(req,res){
@@ -30,13 +32,18 @@ class Controller {
         }
         Customer.create(input)
         .then( _=> res.redirect('/customers'))
-        .catch(e => res.send(e))
+        .catch(e => {
+            let errors = e.errors.map(el => el.message)
+            res.redirect(`/customers/register?${errors.join('&')}`)
+        })
     }
 
     static showFormEdit(req,res){
         const { idCustomer } = req.params
+        let errors
+        if(Object.keys(req.query)) errors = req.query
         Customer.findByPk(idCustomer)
-        .then(data => res.render('formEdit', {data,formatDate}))
+        .then(data => res.render('formEdit', {data,formatDate,errors}))
         .catch(e => res.send(e))
     }
 
@@ -64,16 +71,21 @@ class Controller {
             }
         })
         .then( _=> res.redirect('/customers'))
-        .catch(e => res.send(e))
+        .catch(e => {
+            let errors = e.errors.map(el => el.message)
+            res.redirect(`/customers/${idCustomer}/editProfile?${errors.join('&')}`)
+        })
     }
 
     static showAccounts(req,res){
         const { idCustomer } = req.params
+        let errors
+        if(Object.keys(req.query)) errors = req.query
         Customer.findOne({
             where:{id: idCustomer},
             include: [Account]
         })
-        .then(data => res.render('accounts', {data,formatBalance}))
+        .then(data => res.render('accounts', {data,formatBalance,errors}))
         .catch(e => res.send(e))
     }
 
@@ -86,11 +98,16 @@ class Controller {
         }
         Account.create(input)
         .then( _=> res.redirect(`/customers/${idCustomer}/accounts`))
-        .catch(e => res.send(e))
+        .catch(e => {
+            let errors = e.errors.message
+            res.redirect(`/customers/${idCustomer}/accounts?${errors}`)
+        })
     }
 
     static showTransferForm(req,res){
         const {idCustomer,idAccount} = req.params
+        let errors
+        if(Object.keys(req.query)) errors = req.query
         let sender
         Account.findByPk(idAccount,{include:Customer})
         .then(data => {
@@ -105,7 +122,7 @@ class Controller {
                 }
             })
         })
-        .then(receiver => res.render('formTransfer',{receiver,sender,formatBalance}))
+        .then(receiver => res.render('formTransfer',{receiver,sender,formatBalance,errors}))
         .catch(e => res.send(e))
     }
 
@@ -131,7 +148,10 @@ class Controller {
         )
         })
         .then(_=>res.redirect(`/customers/${idCustomer}/accounts`))
-        .catch(e => res.send(e))
+        .catch(e => {
+            let errors = e.errors.message
+            res.redirect(`/customers/${idCustomer}/accounts/${idAccount}/transfer?${errors}`)
+        })
     }
 }
 
