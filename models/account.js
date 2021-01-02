@@ -24,10 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: (instance) => {
         instance.accountNumber = Math.random().toString().slice(2,12);
         if(!instance.balance) instance.balance = 500000
-        if(instance.balance<500000) return Promise.reject({errors:{message:'Minimum balance for new Accout: Rp500.000'}});
+        if(instance.balance<500000) return Promise.reject({errors:{message:'eb=Minimum balance for new Accout: Rp500.000'}});
       },
       beforeUpdate: (instance) => {
-        if(instance.balance<0) return Promise.reject({errors:{message:'Insufficient balance'}});
+        if(instance.balance<0) return Promise.reject({errors:{message:'eb=Insufficient balance'}});
       }
     },
     sequelize,

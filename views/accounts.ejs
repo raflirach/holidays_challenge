@@ -13,13 +13,18 @@
                 <td><%= account.accountNumber %></td>
                 <td><%= account.type %></td>
                 <td><%= formatBalance(account.balance) %></td>
-                <td><a href="/customers/<%= account.CustomerId %>/accounts/<%= account.id %>/transfer">transfer</a></td>
+                <td><a href="/customers/<%= account.CustomerId %>/accounts/<%= account.id %>/transfer" class="btn btn-info">transfer</a></td>
             </tr>
         <% }) %> 
     </table>
 
 </center>
 <h3 class="text-center"><u>Add Account</u></h3>
+<% if(errors.eb){ %>
+    <div class="alert alert-danger" role="alert">
+        <%= errors.eb %>
+    </div>
+<% } %> 
 <form action="/customers/<%= data.id %>/accounts" method="POST">
     <div class="mb-3">
         <label class="form-label">Account Type : </label>

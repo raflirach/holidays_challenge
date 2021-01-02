@@ -1,6 +1,11 @@
 <%- include('./_partial/header.ejs') %> 
 
 <h4>Transfer From : <%= sender.accountNumber %> <%= sender.type %> <%= formatBalance(sender.balance) %></h4>
+<% if(errors.eb){ %>
+    <div class="alert alert-danger" role="alert">
+        <%= errors.eb %>
+    </div>
+<% } %> 
 <form action="/customers/<%= sender.Customer.id %>/accounts/<%= sender.id %>/transfer" method="POST">
     <div class="mb-3">
         <label class="form-label">Amount:</label>

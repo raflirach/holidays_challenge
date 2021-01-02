@@ -4,10 +4,12 @@
     <div class="mb-3">
       <label class="form-label">ID Number</label>
       <input type="text" class="form-control" name="identityNumber" placeholder="input your id number">
+      <p class="text-danger"><%= errors ? errors.ein : "" %> </p>
     </div>
     <div class="mb-3">
       <label class="form-label">Full Name</label>
       <input type="text" class="form-control" name="fullName" placeholder="input your full name"> 
+      <p class="text-danger"><%= errors ? errors.efn : "" %> </p>
     </div>
     <div class="mb-3">
       <label class="form-label">Address</label>
@@ -16,6 +18,7 @@
     <div class="mb-3">
       <label class="form-label">Birth Date</label>
       <input type="date" class="form-control" name="birthDate" value="2000-01-01">
+      <p class="text-danger"><%= errors ? errors.ebd : "" %> </p>
     </div>
     <div class="mb-3">
         <label class="form-label">Gender:</label>
